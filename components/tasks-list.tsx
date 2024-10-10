@@ -70,7 +70,7 @@ export const TasksList = () => {
             <ul className="flex items-start py-2 px-1 jusitify-start grow w-full">
               {tasks.map((task, index) => {
                 return (
-                  <li key={task.id} className="flex items-center justify-between border border-border rounded-md w-full p-2">
+                  <li key={task.id} className="flex items-center justify-between border border-border rounded-md w-full px-4 py-2">
                     <span className="inline-flex flex-col items-start justify-center leading-[0.5]">
                     <p className="text-2xl font-semibold">{task.title}</p>
                     <p className='text-sm font-light text-foreground/75'>{task.description}</p>
@@ -83,9 +83,9 @@ export const TasksList = () => {
                       <Button
                         onClick={() => deleteTask(task.id)}
                         variant="destructive"
-                        className="size-4 p-1"
+                        className="size-4 p-2"
                       >
-                        <LucideTrash size={16} />
+                        <LucideTrash size={18} />
                       </Button>
                     </div>
                   </li>
@@ -134,6 +134,8 @@ const EditTask = ({
 
   const onFormSubmit = async (values: z.infer<typeof formSchema>) => {
     await new Promise((res) => setTimeout(res, 2500));
+    await onSubmit(values)
+    setEditOpen(false)
   };
 
   return (
@@ -142,7 +144,7 @@ const EditTask = ({
         <Button
           onClick={() => setEditOpen(true)}
           variant="outline"
-          className="size-4 p-1"
+          className="size-4 p-2"
           >
             <LucidePencil size={16} />
         </Button>
@@ -206,10 +208,10 @@ const EditTask = ({
           >
             {form.formState.isSubmitting ? (
               <>
-                Creating <LucideLoaderCircle className="animate-spin" />
+                Editing <LucideLoaderCircle className="animate-spin" />
               </>
             ) : (
-              'Task It'
+              'Edit'
             )}
           </Button>
         </DialogFooter>
