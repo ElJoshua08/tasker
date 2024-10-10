@@ -67,19 +67,23 @@ export const TasksList = () => {
         ) : (
           // Tasks created
           <ScrollArea className="w-full grow">
-            <ul className="flex items-start py-4 px-2 jusitify-start grow w-full">
+            <ul className="flex items-start py-2 px-1 jusitify-start grow w-full">
               {tasks.map((task, index) => {
                 return (
-                  <li className="flex items-center justify-between border border-border rounded-md w-full p-4">
-                    <p>{task.title}</p>
+                  <li key={task.id} className="flex items-center justify-between border border-border rounded-md w-full p-2">
+                    <span className="inline-flex flex-col items-start justify-center leading-[0.5]">
+                    <p className="text-2xl font-semibold">{task.title}</p>
+                    <p className='text-sm font-light text-foreground/75'>{task.description}</p>
+
+                      </span>
 
                     {/* Action buttons: edit and delete */}
                     <div className="flex items-center gap-2">
-                      <EditTask />
+                      <EditTask task={task} onSubmit={async () => console.log("hola")}/>
                       <Button
                         onClick={() => deleteTask(task.id)}
                         variant="destructive"
-                        className="size-6 p-2"
+                        className="size-4 p-1"
                       >
                         <LucideTrash size={16} />
                       </Button>
@@ -115,15 +119,15 @@ const EditTask = ({
   task,
   onSubmit,
 }: {
-  onSubmit: (task: Task) => Promise<void>;
-  onCancel: () => void;
+  task: Partial<Task>;
+  onSubmit: (task: Partial<Task>) => Promise<void>;
 }) => {
   const [editOpen, setEditOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      description: '',
+      title: task.title,
+      description: task.description,
     },
     mode: 'onSubmit',
   });
@@ -138,9 +142,9 @@ const EditTask = ({
         <Button
           onClick={() => setEditOpen(true)}
           variant="outline"
-          className="size-6 p-2"
-        >
-          <LucidePencil size={16} />
+          className="size-4 p-1"
+          >
+            <LucidePencil size={16} />
         </Button>
       </DialogTrigger>
       <DialogContent>
