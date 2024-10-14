@@ -50,7 +50,6 @@ export const CreateTask = ({
         {/* Dialog content */}
         <TaskForm
           onSubmit={async (task) => {
-            console.log('creating task');
             await onCreate(task);
             setOpen(false);
           }}
@@ -86,7 +85,7 @@ const TaskForm = ({
   });
 
   const onFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    await new Promise((res) => setTimeout(res, 2500));
+    await new Promise((res) => setTimeout(res, 1500));
     await onSubmit({
       id: nanoid(20),
       ...values,
@@ -146,7 +145,7 @@ const TaskForm = ({
           >
             {form.formState.isSubmitting ? (
               <>
-                Creating <LucideLoaderCircle className="animate-spin" />
+                Tasking... <LucideLoaderCircle className="animate-spin" />
               </>
             ) : (
               'Task It'
