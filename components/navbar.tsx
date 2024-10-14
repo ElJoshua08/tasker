@@ -11,7 +11,7 @@ export const Navbar = ({ items }: { items: NavItem[] }) => {
   return (
     <nav className="w-full flex items-center justify-between">
       {/* The logo */}
-      <h1 className="text-xl tracking-widest">LOGO</h1>
+      <h1 className="text-xl tracking-widest">TASKER</h1>
 
       <ul className="flex flex-row gap-4 items-center">
         {items.map((item, index) => {
