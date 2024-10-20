@@ -12,15 +12,18 @@ export default function HomePage() {
       </p>
 
       <Link
-        href="tasks"
+        href="/login"
         className="h-auto mt-20"
       >
-        <Button className="group transition-all shadow-white/20 hover:shadow-white/40 duration-300 shadow-card text-3xl h-auto font-semibold  hover:bg-black dark:hover:bg-white flex items-center gap-2">
+        <Button
+          className="group transition-all shadow-white/20 hover:shadow-white/40 duration-300 shadow-card text-3xl h-auto font-semibold  hover:bg-black dark:hover:bg-white flex items-center gap-2 py-2"
+          size="lg"
+        >
           Start Now{' '}
           <ChevronRight
-            size={32}
+            size={40}
             strokeWidth={4}
-            className="size-32 transition-all duration-300 ml-0 group-hover:ml-5"
+            className="transition-all duration-300 ml-0 group-hover:ml-5"
           />
         </Button>
       </Link>

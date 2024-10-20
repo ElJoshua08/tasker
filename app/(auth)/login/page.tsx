@@ -1,5 +1,6 @@
 'use client';
 
+import { GoogleIcon } from '@/components/google-icon';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -18,6 +19,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { signUpWithGoogle } from '@/lib/server/oauth';
 import { login } from '@/services/auth.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon, LoaderCircleIcon } from 'lucide-react';
@@ -62,7 +64,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <>
+    <section className="flex flex-col items-center justify-center gap-4">
       <Card>
         <CardHeader>
           <CardTitle className="font-medium text-2xl uppercase tracking-widest">
@@ -151,6 +153,23 @@ export default function RegisterPage() {
           </Button>
         </CardFooter>
       </Card>
+
+      <div className="w-full flex flex-row gap-2 items-center grow text-xl">
+        <Separator className="shrink" />
+        OR
+        <Separator className="shrink" />
+      </div>
+
+      <Button
+        variant="outline"
+        className="flex items-center justify-start gap-4 w-full px-4 text-base font-normal
+        "
+        size="lg"
+        onClick={() => signUpWithGoogle()}
+      >
+        <GoogleIcon size={20} /> Continue with Google
+      </Button>
+
       <Link href="/register">
         <Button
           variant="link"
@@ -159,6 +178,6 @@ export default function RegisterPage() {
           {"Doesn't have an account yet?"}
         </Button>
       </Link>
-    </>
+    </section>
   );
 }

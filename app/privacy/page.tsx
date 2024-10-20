@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
           at:{' '}
           <a
             className="hover:text-foreground transition-colors duration-100"
-            href="mailto:taskerspacecontact@gmail.com"
+            href="mailto:taskerspacecontact@gmail.com" target='_top'
           >
             taskerspacecontact@gmail.com
           </a>
