@@ -55,7 +55,7 @@ export const TasksList = () => {
       console.log(scrollRef.current.scrollHeight);
       setScrollHeight(scrollRef.current.scrollHeight);
     }
-  }, [scrollRef.current]);
+  }, [scrollRef]);
 
   const deleteTask = (id: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
