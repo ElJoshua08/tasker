@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateTask } from './create-task';
 import {
@@ -41,19 +41,21 @@ import {
   DialogTrigger,
   DialogDescription,
 } from './ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from './ui/alert-dialog';
+
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Separator } from './ui/separator';
 
 export const TasksList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [scrollHeight, setScrollHeight] = useState<number>();
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      console.log(scrollRef.current.scrollHeight);
+      setScrollHeight(scrollRef.current.scrollHeight);
+    }
+  }, [scrollRef.current]);
 
   const deleteTask = (id: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
@@ -80,7 +82,7 @@ export const TasksList = () => {
           // No tasks created
           <>
             <h1 className="text-lg text-foreground/75 font-normal text-center">
-              Hm, it seems like you don't have any task
+              {"Hm, it seems like you don't have any task"}
             </h1>
             <p className="text-center text-2xl font-bold mt-2 leading-tight">
               Click the button below <br /> to create a new task!
@@ -88,17 +90,22 @@ export const TasksList = () => {
           </>
         ) : (
           // Tasks created
-          <ScrollArea className="w-full grow">
-            <ul className="flex items-start py-2 px-1 jusitify-start grow w-full">
+          <ScrollArea
+            ref={scrollRef}
+            className="w-full grow"
+            style={{ height: scrollHeight || 'auto' }}
+          >
+            <ul className="flex flex-col gap-4 items-start py-2 px-1 jusitify-start grow w-full">
               {tasks.map((task, index) => {
                 return (
                   <li
                     key={task.id}
                     className="flex items-center justify-between border border-border rounded-md w-full px-4 py-2"
                   >
-                    <span className="inline-flex flex-col items-start justify-center leading-[0.5]">
-                      <p className="text-2xl font-semibold">{task.title}</p>
-                      <p className="text-sm font-light text-foreground/75">
+                    <span className="flex flex-col items-start justify-start -space-y-7">
+                      <p className="text-lg font-medium">{task.title}</p>
+                      <br />
+                      <p className="text-base font-normal text-foreground/70">
                         {task.description}
                       </p>
                     </span>
@@ -106,19 +113,31 @@ export const TasksList = () => {
                     {/* Action buttons: edit and delete */}
                     <Popover>
                       <PopoverTrigger>
-                        <EllipsisVerticalIcon className="text-foreground/75" />
+                        <EllipsisVerticalIcon
+                          className="text-foreground/75"
+                          size={20}
+                        />
                       </PopoverTrigger>
-                      <PopoverContent className="flex flex-col items-center justify-stretch w-24 p-2">
-                        <EditTask
-                          task={task}
-                          onEdit={async (editedTask) =>
-                            updateTask(task.id, editedTask)
-                          }
-                        />
-                        <Separator />
-                        <DeleteTask
-                          onDelete={async () => deleteTask(task.id)}
-                        />
+                      <PopoverContent className="flex flex-col items-center justify-start w-auto p-1">
+                        <ActionItem
+                          icon={<PencilIcon size={20} />}
+                          label="Edit"
+                        >
+                          <EditTask
+                            task={task}
+                            onEdit={async (editedTask) =>
+                              updateTask(task.id, editedTask)
+                            }
+                          />
+                        </ActionItem>
+                        <ActionItem
+                          icon={<TrashIcon size={20} />}
+                          label="Delete"
+                        >
+                          <DeleteTask
+                            onDelete={async () => deleteTask(task.id)}
+                          />
+                        </ActionItem>
                       </PopoverContent>
                     </Popover>
                   </li>
@@ -148,46 +167,55 @@ const formSchema = z.object({
   description: z.string(),
 });
 
+const ActionItem = ({
+  icon,
+  label,
+  children,
+}: {
+  icon: ReactNode;
+  label: string;
+  children: ReactNode;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          className="w-full flex items-center justify-start gap-4 p-2 text-base font-normal"
+        >
+          {icon}
+          {label}
+        </Button>
+      </DialogTrigger>
+      {children}
+    </Dialog>
+  );
+};
+
 const DeleteTask = ({ onDelete }: { onDelete: () => Promise<void> }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
-    <AlertDialog
-      open={deleteOpen}
-      onOpenChange={setDeleteOpen}
-    >
-      <AlertDialogTrigger asChild>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Are you sure you want to delete this task?</DialogTitle>
+      </DialogHeader>
+      <p>This action is irreversible</p>
+      <DialogFooter>
         <Button
-          onClick={() => setDeleteOpen(true)}
-          variant="ghost"
-          className="w-full flex items-center justify-start text-sm"
+          variant="outline"
+          onClick={() => setDeleteOpen(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="destructive"
+          onClick={onDelete}
         >
           Delete
         </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to delete this task?
-          </AlertDialogTitle>
-        </AlertDialogHeader>
-        <p>This action is irreversible</p>
-        <AlertDialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => setDeleteOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={onDelete}
-          >
-            Delete
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogFooter>
+    </DialogContent>
   );
 };
 
@@ -215,87 +243,73 @@ const EditTask = ({
   };
 
   return (
-    <Dialog
-      open={editOpen}
-      onOpenChange={setEditOpen}
-    >
-      <DialogTrigger asChild>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Edit your task</DialogTitle>
+        <DialogDescription />
+      </DialogHeader>
+      <Form {...form}>
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Make boring stuff..."
+                  type="string"
+                  required
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className="text-destructive" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Description{' '}
+                <span className="text-foreground/75">(optional)</span>
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="I don't like to do boring stuff :("
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </Form>
+      <DialogFooter className="flex flex-row gap-4 justify-end mt-4">
         <Button
-          onClick={() => setEditOpen(true)}
-          variant="ghost"
-          className="w-full flex items-center justify-start gap-2 text-sm"
+          variant="outline"
+          onClick={() => setEditOpen(false)}
+          type="reset"
         >
-          Edit
+          Cancel
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit your task</DialogTitle>
-          <DialogDescription />
-        </DialogHeader>
-        <Form {...form}>
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Make boring stuff..."
-                    type="string"
-                    required
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-destructive" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Description{' '}
-                  <span className="text-foreground/75">(optional)</span>
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="I don't like to do boring stuff :("
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </Form>
-        <DialogFooter className="flex flex-row gap-4 justify-end mt-4">
-          <Button
-            variant="outline"
-            onClick={() => setEditOpen(false)}
-            type="reset"
-          >
-            Cancel
-          </Button>
-          <Button
-            disabled={form.formState.isSubmitting}
-            variant="default"
-            onClick={form.handleSubmit(onFormSubmit)}
-            className="flex items-center gap-2"
-          >
-            {form.formState.isSubmitting ? (
-              <>
-                Editing <LoaderCircleIcon className="animate-spin" />
-              </>
-            ) : (
-              'Edit'
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <Button
+          disabled={form.formState.isSubmitting}
+          variant="default"
+          onClick={form.handleSubmit(onFormSubmit)}
+          className="flex items-center gap-2"
+        >
+          {form.formState.isSubmitting ? (
+            <>
+              Editing <LoaderCircleIcon className="animate-spin" />
+            </>
+          ) : (
+            'Edit'
+          )}
+        </Button>
+      </DialogFooter>
+    </DialogContent>
   );
 };
