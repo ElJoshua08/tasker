@@ -16,5 +16,7 @@ export async function signUpWithGoogle() {
     `${origin}/signup`
   );
 
+  console.log(redirectUrl);
+
   return redirect(redirectUrl);
 }
