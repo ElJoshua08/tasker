@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { CreateTask } from "./create-task";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { CreateTask } from './create-task';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Task } from "@/interfaces";
-import { toast } from "sonner";
-import { ScrollArea } from "./ui/scroll-area";
-import { Button } from "./ui/button";
+} from './ui/card';
+import { Task } from '@/interfaces';
+import { toast } from 'sonner';
+import { ScrollArea } from './ui/scroll-area';
+import { Button } from './ui/button';
 import {
   EllipsisVerticalIcon,
   TrashIcon,
   PencilIcon,
-  LoaderCircleIcon
-} from "lucide-react";
+  LoaderCircleIcon,
+} from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -27,11 +27,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { z } from "zod";
+} from './ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -40,7 +40,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from "./ui/dialog";
+} from './ui/dialog';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -48,9 +48,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./ui/alert-dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Separator } from "./ui/separator";
+} from './ui/alert-dialog';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Separator } from './ui/separator';
 
 export const TasksList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -109,17 +109,17 @@ export const TasksList = () => {
                         <EllipsisVerticalIcon className="text-foreground/75" />
                       </PopoverTrigger>
                       <PopoverContent className="flex flex-col items-center justify-stretch w-24 p-2">
-                      <EditTask
-                        task={task}
-                        onEdit={async (editedTask) =>
-                          updateTask(task.id, editedTask)
-                        }
-                      />
-                      <Separator />
-                      <DeleteTask
-                        onDelete={async () => deleteTask(task.id)} />
-
-                        </PopoverContent>
+                        <EditTask
+                          task={task}
+                          onEdit={async (editedTask) =>
+                            updateTask(task.id, editedTask)
+                          }
+                        />
+                        <Separator />
+                        <DeleteTask
+                          onDelete={async () => deleteTask(task.id)}
+                        />
+                      </PopoverContent>
                     </Popover>
                   </li>
                 );
@@ -132,7 +132,7 @@ export const TasksList = () => {
         <CreateTask
           onCreate={async (task) => {
             setTasks((prev) => [...prev, task]);
-            toast.success("Task created successfully!");
+            toast.success('Task created successfully!');
           }}
         />
       </CardFooter>
@@ -143,7 +143,7 @@ export const TasksList = () => {
 const formSchema = z.object({
   title: z
     .string()
-    .min(3, "The title must be at least 3 character long")
+    .min(3, 'The title must be at least 3 character long')
     .max(40, "The title can't be longer than 40 characters"),
   description: z.string(),
 });
@@ -152,7 +152,10 @@ const DeleteTask = ({ onDelete }: { onDelete: () => Promise<void> }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
-    <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+    <AlertDialog
+      open={deleteOpen}
+      onOpenChange={setDeleteOpen}
+    >
       <AlertDialogTrigger asChild>
         <Button
           onClick={() => setDeleteOpen(true)}
@@ -170,12 +173,18 @@ const DeleteTask = ({ onDelete }: { onDelete: () => Promise<void> }) => {
         </AlertDialogHeader>
         <p>This action is irreversible</p>
         <AlertDialogFooter>
-          <Button variant="outline" onClick={() => setDeleteOpen(false)}>
+          <Button
+            variant="outline"
+            onClick={() => setDeleteOpen(false)}
+          >
             Cancel
-            </Button>
-            <Button variant="destructive" onClick={onDelete}>
-              Delete
-            </Button>
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={onDelete}
+          >
+            Delete
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -196,7 +205,7 @@ const EditTask = ({
       title: task.title,
       description: task.description,
     },
-    mode: "onSubmit",
+    mode: 'onSubmit',
   });
 
   const onFormSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -206,7 +215,10 @@ const EditTask = ({
   };
 
   return (
-    <Dialog open={editOpen} onOpenChange={setEditOpen}>
+    <Dialog
+      open={editOpen}
+      onOpenChange={setEditOpen}
+    >
       <DialogTrigger asChild>
         <Button
           onClick={() => setEditOpen(true)}
@@ -246,7 +258,7 @@ const EditTask = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Description{" "}
+                  Description{' '}
                   <span className="text-foreground/75">(optional)</span>
                 </FormLabel>
                 <FormControl>
@@ -279,7 +291,7 @@ const EditTask = ({
                 Editing <LoaderCircleIcon className="animate-spin" />
               </>
             ) : (
-              "Edit"
+              'Edit'
             )}
           </Button>
         </DialogFooter>
