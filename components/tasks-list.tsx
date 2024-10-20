@@ -52,7 +52,6 @@ export const TasksList = () => {
 
   useEffect(() => {
     if (scrollRef.current) {
-      console.log(scrollRef.current.scrollHeight);
       setScrollHeight(scrollRef.current.scrollHeight);
     }
   }, [scrollRef]);

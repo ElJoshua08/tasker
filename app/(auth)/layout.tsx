@@ -8,7 +8,6 @@ export default async function AuthLayout({
 }) {
   const user = await getUser();
 
-  console.log(user);
 
   if (user) {
     redirect('/tasks');

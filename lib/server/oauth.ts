@@ -10,7 +10,6 @@ export async function signUpWithGoogle() {
 
   const origin = headers().get('origin');
 
-  console.log('origin', origin);
 
   const redirectUrl = await account.createOAuth2Token(
     OAuthProvider.Google,
@@ -18,7 +17,6 @@ export async function signUpWithGoogle() {
     `${origin}/login`
   );
 
-  console.log('redirectUrl', redirectUrl);
 
   return redirect(redirectUrl);
 }

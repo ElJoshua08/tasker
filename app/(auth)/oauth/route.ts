@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     path: '/',
     httpOnly: true,
     sameSite: 'strict',
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     expires: addMonths(new Date(), 4),
   });
 
