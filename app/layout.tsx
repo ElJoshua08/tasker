@@ -2,7 +2,6 @@ import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { Toaster } from '@/components/ui/sonner';
 
 const rubik = Rubik({ weight: 'variable', subsets: ['latin'] });
@@ -32,7 +31,6 @@ export default function RootLayout({
           enableSystem
         >
           {children}
-          <ThemeToggle className="fixed bottom-4 left-4" />
           <Toaster
             closeButton
             richColors
