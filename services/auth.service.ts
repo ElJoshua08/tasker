@@ -15,9 +15,9 @@ export async function login(
   password: string
 ): Promise<[string | null, Models.Session | null]> {
   try {
-    const { account, user } = await createAdminClient();
+    const { account, users } = await createAdminClient();
 
-    const emailFound = await user
+    const emailFound = await users
       .list([Query.equal('email', email)])
       .then((users) => users.total > 0);
 
