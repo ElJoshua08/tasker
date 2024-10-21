@@ -50,7 +50,7 @@ export async function createAdminClient() {
       return new Databases(client);
     },
 
-    get user() {
+    get users() {
       return new Users(client);
     },
   };
