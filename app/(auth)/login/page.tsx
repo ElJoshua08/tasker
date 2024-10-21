@@ -1,183 +1,126 @@
-'use client';
+"use client";
 
-import { GoogleIcon } from '@/components/google-icon';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { signUpWithGoogle } from '@/lib/server/oauth';
-import { login } from '@/services/auth.service';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { EyeIcon, EyeOffIcon, LoaderCircleIcon } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-const loginFormSchema = z.object({
-  email: z.string().email("Email doesn't look valid"),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(7),
 });
 
-export default function RegisterPage() {
-  const router = useRouter();
+export default function LoginPage() {
+  const [passwordHidden, setPasswordHidden] = useState(true);
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
-  const onSubmit = async ({
-    email,
-    password,
-  }: z.infer<typeof loginFormSchema>) => {
-    const [error, _] = await login(email, password);
-
-    if (error) {
-      toast.error(error);
-      form.reset();
-      return;
-    }
-
-    router.push('/tasks');
-  };
-
   return (
-    <section className="flex flex-col items-center justify-center gap-4">
-      <Card>
+    <>
+      <Card className="w-96 p-4 bg-background/30 backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="font-medium text-2xl uppercase tracking-widest">
-            Login
+          <CardTitle className="text-3xl text-center tracking-[0.3em] pb-4">
+            LOGIN
           </CardTitle>
           <Separator />
         </CardHeader>
-        <CardContent>
+        <CardContent className="py-1">
           <Form {...form}>
-            <form className="space-y-6">
+            <form className="flex flex-col gap-4">
               <FormField
                 name="email"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <FormLabel className="text-base font-light">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        type="email"
-                        autoComplete="email"
-                        id="email"
-                        placeholder="Enter your email"
+                        type="Email"
+                        className="h-10"
+                        placeholder="john.doe@example.com"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 name="password"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel htmlFor="password">Password</FormLabel>
-                      <div className="relative">
-                        <FormControl>
-                          <Input
-                            type={showPassword ? 'text' : 'password'}
-                            autoComplete="current-password"
-                            id="password"
-                            placeholder="Enter your password"
-                            {...field}
-                          />
-                        </FormControl>
-                        {showPassword ? (
-                          <EyeIcon
-                            className="absolute right-4  top-1/2 -translate-y-1/2 text-foreground/60 cursor-pointer"
-                            size={20}
-                            onClick={() => setShowPassword(false)}
-                          />
-                        ) : (
-                          <EyeOffIcon
-                            className="absolute right-4  top-1/2 -translate-y-1/2 text-foreground/60 cursor-pointer"
-                            size={20}
-                            onClick={() => setShowPassword(true)}
-                          />
-                        )}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-light">
+                      Password
+                    </FormLabel>
+                    <div className="relative w-full h-10 flex items-center justify-end px-4">
+                      <FormControl>
+                        <Input
+                          type={passwordHidden ? "password" : "text"}
+                          placeholder="·······"
+                          {...field}
+                          className="absolute top-0 left-0 w-full h-10"
+                        />
+                      </FormControl>
+                      <div
+                        className="z-10 cursor-pointer"
+                        onClick={() => setPasswordHidden((prev) => !prev)}
+                      >
+                        {passwordHidden ? <EyeIcon /> : <EyeOffIcon />}
                       </div>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
+                    </div>
+                  </FormItem>
+                )}
               />
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex items-end justify-between w-full gap-16">
+        <CardFooter className="flex w-full items-end justify-between mt-6">
           <Link href="/forgot-password">
             <Button
               variant="link"
-              className="flex items-end p-0"
+              className="p-0 flex items-end transition-all duration-100 text-foreground/75 hover:text-foreground"
             >
-              {'Forgot password?'}
+              forgot your password?
             </Button>
           </Link>
-          <Button
-            disabled={form.formState.isSubmitting}
-            className="flex items-center gap-x-2"
-            onClick={form.handleSubmit(onSubmit)}
-          >
-            Login
-            {form.formState.isSubmitting && (
-              <LoaderCircleIcon className="animate-spin" />
-            )}
-          </Button>
+          <Button>Login</Button>
         </CardFooter>
       </Card>
-
-      <div className="w-full flex flex-row gap-2 items-center grow text-xl">
-        <Separator className="shrink" />
-        OR
-        <Separator className="shrink" />
-      </div>
-
-      <Button
-        variant="outline"
-        className="flex items-center justify-start gap-4 w-full px-4 text-base font-normal
-        "
-        size="lg"
-        onClick={() => signUpWithGoogle()}
-      >
-        <GoogleIcon size={20} /> Continue with Google
-      </Button>
-
       <Link href="/register">
         <Button
           variant="link"
-          className="flex items-end p-0"
+          className="p-0 flex items-end transition-all duration-100 text-foreground/75 hover:text-foreground"
         >
-          {"Doesn't have an account yet?"}
+          don't have an account yet?
         </Button>
       </Link>
-    </section>
+    </>
   );
 }

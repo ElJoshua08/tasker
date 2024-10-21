@@ -35,15 +35,9 @@ export const CreateTask = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={setOpen}
-    >
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          className="w-full rounded-lg"
-          onClick={() => setOpen(true)}
-        >
+        <Button className="w-full rounded-lg" onClick={() => setOpen(true)}>
           Create New Task
         </Button>
       </DialogTrigger>
@@ -140,11 +134,7 @@ const TaskForm = ({
         />
 
         <div className="flex flex-row gap-4 justify-end mt-4">
-          <Button
-            variant="outline"
-            onClick={onCancel}
-            type="reset"
-          >
+          <Button variant="outline" onClick={onCancel} type="reset">
             Cancel
           </Button>
           <Button
