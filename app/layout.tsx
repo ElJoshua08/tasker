@@ -1,10 +1,10 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Rubik } from 'next/font/google';
+import { Rethink_Sans } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 
-const rubik = Rubik({ weight: 'variable', subsets: ['latin'] });
+const rethink_sans = Rethink_Sans({ weight: 'variable', subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Tasker',
@@ -22,7 +22,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className={rubik.className}
+        className={rethink_sans.className}
         suppressHydrationWarning
       >
         <ThemeProvider
