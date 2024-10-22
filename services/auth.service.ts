@@ -4,6 +4,7 @@ import { createAdminClient, createSessionClient } from '@/lib/server/appwrite';
 import { type AppwriteException, ID, Models, Query } from 'node-appwrite';
 import { cookies } from 'next/headers';
 import { addMonths } from 'date-fns';
+import { redirect } from 'next/navigation';
 
 const {
   NEXT_PUBLIC_DATABASE: DATABASE,
@@ -80,7 +81,22 @@ export async function register(
   }
 }
 
-export async function logout() {}
+export async function logout() {
+  try {
+    const { account } = await createSessionClient();
+
+    const cookieSession = cookies().get('auth-session');
+    if (!cookieSession) return;
+
+    await account.deleteSession('current');
+
+    cookies().delete('auth-session');
+
+    redirect('/login');
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 export async function getUser() {
   try {

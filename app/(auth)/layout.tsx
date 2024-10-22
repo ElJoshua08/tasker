@@ -1,21 +1,17 @@
-import { getUser } from '@/services/auth.service';
-import { redirect } from 'next/navigation';
-
+import { ProtectedRoute } from '@/components/protected-route';
 export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getUser();
-
-
-  if (user) {
-    redirect('/tasks');
-  }
-
   return (
-    <main className="flex h-screen w-full items-center justify-center flex-col">
-      {children}
-    </main>
+    <ProtectedRoute
+      role="no-logged-in"
+      redirectTo="/user"
+    >
+      <main className="flex h-screen w-full items-center justify-center flex-col">
+        {children}
+      </main>
+    </ProtectedRoute>
   );
 }

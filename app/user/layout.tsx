@@ -1,12 +1,8 @@
 import { NavItem } from '@/interfaces';
 import { Navbar } from './_components/navbar';
-import {
-  HomeIcon,
-  LogOutIcon,
-  SettingsIcon,
-  SquareCheckIcon,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { HomeIcon, SettingsIcon, SquareCheckIcon } from 'lucide-react';
+import { NavbarFooter } from './_components/nav-footer';
+import { ProtectedRoute } from '@/components/protected-route';
 
 export default async function TasksAppLayout({
   children,
@@ -47,28 +43,22 @@ export default async function TasksAppLayout({
   ] as NavItem[];
 
   return (
-    <main className="flex flex-row justify-start items-start h-screen w-full ">
-      <Navbar
-        navItems={navItems}
-        header={<NavbarHeader />}
-        footer={<NavbarFooter />}
-      />
-      {children}
-    </main>
+    <ProtectedRoute
+      role="logged-in"
+      redirectTo="/login"
+    >
+      <main className="flex flex-row justify-start items-start h-screen w-full ">
+        <Navbar
+          navItems={navItems}
+          header={<NavbarHeader />}
+          footer={<NavbarFooter />}
+        />
+        {children}
+      </main>
+    </ProtectedRoute>
   );
 }
 
 const NavbarHeader = () => {
   return <h1>This is the navbar header</h1>;
-};
-
-const NavbarFooter = () => {
-  return (
-    <Button
-      variant="destructive"
-      className="flex flex-row gap-2 items-center justify-center w-full px-2"
-    >
-      Log Out
-    </Button>
-  );
 };

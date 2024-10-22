@@ -44,5 +44,5 @@ export async function GET(request: NextRequest) {
 
   console.log(isNewUser);
 
-  return NextResponse.redirect(`${request.nextUrl.origin}/tasks`);
+  return NextResponse.redirect(`${request.nextUrl.origin}/user`);
 }
