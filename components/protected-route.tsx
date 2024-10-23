@@ -14,8 +14,6 @@ export const ProtectedRoute = async ({
 }) => {
   const user = await getUser();
 
-  console.log(user);
-
   switch (role) {
     case 'no-logged-in':
       if (!user) return <>{children}</>;
