@@ -16,7 +16,7 @@ export default function HomePage() {
         className="h-auto mt-20"
       >
         <Button
-          className="group transition-all shadow-white/20 hover:shadow-white/40 duration-300 shadow-card text-3xl h-auto font-semibold  hover:bg-black dark:hover:bg-white flex items-center gap-2 py-2"
+          className="group transition-all shadow-white/40 hover:shadow-white/60 duration-300 shadow-card text-2xl h-auto font-semibold  hover:bg-black dark:hover:bg-white flex items-center gap-2 py-1"
           size="lg"
         >
           Start Now{' '}

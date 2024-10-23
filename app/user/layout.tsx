@@ -47,6 +47,8 @@ export default async function TasksAppLayout({
     },
   ] as NavItem[];
 
+  if (!user) return;
+
   return (
     <ProtectedRoute
       role="logged-in"
@@ -54,27 +56,11 @@ export default async function TasksAppLayout({
     >
       <main className="flex flex-row justify-start items-start h-screen w-full ">
         <Navbar
+          user={user}
           navItems={navItems}
-          header={<NavbarHeader user={user} />}
-          footer={<NavbarFooter />}
         />
         {children}
       </main>
     </ProtectedRoute>
   );
 }
-
-const NavbarHeader = ({
-  user,
-}: {
-  user: Models.User<Models.Preferences> | null;
-}) => {
-  return user ? (
-    <div className="flex flex-row gap-2 w-full justify-start items-center">
-      <Avatar className="bg-foreground/50 text-xl text-foreground flex items-center justify-center font-extrabold">
-        {user.name.charAt(0)}
-      </Avatar>
-      <h1 className="text-lg font-semibold">{user.name}</h1>
-    </div>
-  ) : null;
-};

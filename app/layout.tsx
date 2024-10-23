@@ -1,8 +1,8 @@
-import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
-import type { Metadata } from 'next';
+import { ThemeProvider } from '@/components/theme-provider';
 import { Rethink_Sans } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
+import type { Metadata } from 'next';
 
 const rethink_sans = Rethink_Sans({ weight: 'variable', subsets: ['latin'] });
 
