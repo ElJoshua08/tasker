@@ -97,9 +97,18 @@ export async function register(
     throw new Error('Missing env variables');
   }
 
+  const { account, database, users } = await createAdminClient();
   try {
-    const { account, database } = await createAdminClient();
+    const userExists = await users
+      .list([Query.equal('email', email)])
+      .then((users) => users.total > 0);
 
+    if (userExists) return ['This user already exists, try logging in.', null];
+  } catch {
+    return ['Woops! Something went wrong. Please try again later.', null];
+  }
+
+  try {
     const user = await account.create(ID.unique(), email, password, username);
 
     await database.createDocument(DATABASE, USERS_COLLECTION, user.$id, {

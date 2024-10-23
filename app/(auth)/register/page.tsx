@@ -77,7 +77,7 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="space-y-6">
+            <form className="space-y-4">
               <FormField
                 name="username"
                 render={({ field }) => (
@@ -187,7 +187,7 @@ export default function RegisterPage() {
       <Link href="/login">
         <Button
           variant="link"
-          className="flex items-end p-0"
+          className="flex items-end p-0 h-auto"
         >
           {"Already have an account?"}
         </Button>

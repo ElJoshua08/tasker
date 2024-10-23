@@ -173,7 +173,7 @@ export default function LoginPage() {
       <Link href="/register">
         <Button
           variant="link"
-          className="flex items-end p-0"
+          className="flex items-end p-0 h-auto"
         >
           {"Doesn't have an account yet?"}
         </Button>

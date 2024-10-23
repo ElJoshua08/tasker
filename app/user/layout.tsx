@@ -1,11 +1,8 @@
 import { NavItem } from '@/interfaces';
 import { Navbar } from './_components/navbar';
 import { HomeIcon, SettingsIcon, SquareCheckIcon } from 'lucide-react';
-import { NavbarFooter } from './_components/nav-footer';
 import { ProtectedRoute } from '@/components/protected-route';
-import { Models } from 'node-appwrite';
 import { getUser } from '@/services/auth.service';
-import { Avatar } from '@/components/ui/avatar';
 
 export default async function TasksAppLayout({
   children,

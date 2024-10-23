@@ -32,16 +32,15 @@ export const Navbar = ({
   return (
     <motion.nav
       className={cn(
-        'flex flex-col items-stretch justify-start h-screen border-r border-border py-4 px-2 grow-0 shrink-0 relative',
-        { 'w-60': isOpen, 'w-20': !isOpen },
-        { 'px-2': !isOpen }
+        'flex flex-col items-stretch justify-start h-screen border-r border-border p-2 grow-0 shrink-0 relative',
+        isOpen ? 'absolute z-50 sm:w-full sm:relative  w-60' : 'w-20'
       )}
       initial={{ width: WIDTHS.open }}
       animate={{ width: isOpen ? WIDTHS.open : WIDTHS.closed }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
       <header className="flex flex-row gap-2 w-full justify-center items-center">
-        <Avatar className="bg-foreground/50 text-2xl text-foreground flex items-center justify-center font-semibold">
+        <Avatar className="bg-primary/50 text-2xl text-foreground flex items-center justify-center font-semibold">
           {user.name.charAt(0)}
         </Avatar>
         <motion.h1
@@ -56,7 +55,7 @@ export const Navbar = ({
         </motion.h1>
       </header>
 
-      <Separator className="my-4" />
+      <Separator className="my-2" />
 
       <ul className="flex flex-col gap-2 items-center justify-start w-full grow">
         {navItems.map((item) => (
