@@ -4,7 +4,7 @@ import { createAdminClient, createSessionClient } from '@/lib/server/appwrite';
 import { type AppwriteException, ID, Models, Query } from 'node-appwrite';
 import { cookies } from 'next/headers';
 import { addMonths } from 'date-fns';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 
 const {
   NEXT_PUBLIC_DATABASE: DATABASE,
@@ -49,6 +49,45 @@ export async function login(
   }
 }
 
+export async function oauthLogin(userId: string, secret: string) {
+  const { account, database, users } = await createAdminClient();
+
+  const session = await account.createSession(userId!, secret!);
+
+  // Set the cookie
+  cookies().set('auth-session', session.secret, {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    expires: addMonths(new Date(), 4),
+  });
+
+  const isNewUser = await database
+    .listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE!,
+      process.env.NEXT_PUBLIC_USERS_COLLECTION!,
+      [Query.equal('$id', session.userId)]
+    )
+    .then((data) => data.total === 0);
+
+  if (isNewUser) {
+    const user = await users.get(session.userId);
+
+    await database.createDocument(
+      process.env.NEXT_PUBLIC_DATABASE!,
+      process.env.NEXT_PUBLIC_USERS_COLLECTION!,
+      user.$id,
+      {
+        name: user.name,
+        email: user.email,
+      }
+    );
+  }
+
+  redirect('/oauth-redirect');
+}
+
 export async function register(
   email: string,
   password: string,
@@ -84,17 +123,12 @@ export async function register(
 export async function logout() {
   try {
     const { account } = await createSessionClient();
-
-    const cookieSession = cookies().get('auth-session');
-    if (!cookieSession) return;
-
     await account.deleteSession('current');
-
     cookies().delete('auth-session');
 
-    redirect('/login');
+    return true;
   } catch (e) {
-    console.log(e);
+    return false;
   }
 }
 
@@ -103,6 +137,7 @@ export async function getUser() {
     const { account } = await createSessionClient();
 
     const user = await account.get();
+
     return user;
   } catch (error) {
     return null;

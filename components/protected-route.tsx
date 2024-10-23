@@ -1,4 +1,4 @@
-import { getUser } from '@/services/auth.service';
+import {  getUser } from '@/services/auth.service';
 import { redirect } from 'next/navigation';
 
 export const ProtectedRoute = async ({

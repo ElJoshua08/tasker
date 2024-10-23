@@ -35,7 +35,7 @@ const loginFormSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -60,7 +60,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push('/tasks');
+    router.push('/user');
   };
 
   return (

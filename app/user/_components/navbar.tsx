@@ -29,7 +29,7 @@ export const Navbar = ({
   return (
     <motion.nav
       className={cn(
-        'flex flex-col items-center justify-start h-screen border-r border-border px-4 py-6',
+        'flex flex-col items-center justify-start h-screen border-r border-border px-4 py-6 grow-0 shrink-0',
         { 'w-60': isOpen, 'w-20': !isOpen }
       )}
       initial={{ width: WIDTHS.open }}
