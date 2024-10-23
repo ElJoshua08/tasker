@@ -1,5 +1,7 @@
-import {  getUser } from '@/services/auth.service';
+import { getUser } from '@/services/auth.service';
 import { redirect } from 'next/navigation';
+
+export const revalidate = 0;
 
 export const ProtectedRoute = async ({
   children,
@@ -11,6 +13,8 @@ export const ProtectedRoute = async ({
   redirectTo?: string;
 }) => {
   const user = await getUser();
+
+  console.log(user);
 
   switch (role) {
     case 'no-logged-in':

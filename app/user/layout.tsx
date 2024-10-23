@@ -44,8 +44,6 @@ export default async function TasksAppLayout({
     },
   ] as NavItem[];
 
-  if (!user) return;
-
   return (
     <ProtectedRoute
       role="logged-in"

@@ -11,11 +11,11 @@ import { usePathname } from 'next/navigation';
 import { Avatar } from '@/components/ui/avatar';
 import { Models } from 'node-appwrite';
 import { logout } from '@/services/auth.service';
-import { LoaderCircleIcon, LogOutIcon } from 'lucide-react';
+import { ChevronRightIcon, LoaderCircleIcon, LogOutIcon } from 'lucide-react';
 
 const WIDTHS = {
-  open: '250px', // Open width (full when viewport is narrower than this)
-  closed: '60px', // Closed, only icons visible.
+  open: 250, // Open width (full when viewport is narrower than this)
+  closed: 60, // Closed, only icons visible.
 };
 
 export const Navbar = ({
@@ -29,17 +29,19 @@ export const Navbar = ({
   const [logoutLoading, setLogoutLoading] = useState(false);
   const pathname = usePathname();
 
+  if(!user) return null;
+
   return (
     <motion.nav
       className={cn(
-        'flex flex-col items-stretch justify-start h-screen border-r border-border p-2 grow-0 shrink-0 relative',
+        'bg-background/50 backdrop-blur-xl flex flex-col items-stretch justify-start h-screen border-r border-border p-2 grow-0 shrink-0 relative',
         isOpen ? 'absolute z-50 sm:w-full sm:relative  w-60' : 'w-20'
       )}
       initial={{ width: WIDTHS.open }}
       animate={{ width: isOpen ? WIDTHS.open : WIDTHS.closed }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
-      <header className="flex flex-row gap-2 w-full justify-center items-center">
+      <header className="flex flex-row gap-2 w-full justify-start items-center">
         <Avatar className="bg-primary/50 text-2xl text-foreground flex items-center justify-center font-semibold">
           {user.name.charAt(0)}
         </Avatar>
@@ -47,6 +49,7 @@ export const Navbar = ({
           initial={{ scaleX: 1, display: 'block' }}
           animate={{
             scaleX: isOpen ? 1 : 0,
+            transformOrigin: 'left',
             display: isOpen ? 'initial' : 'none',
           }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -58,6 +61,16 @@ export const Navbar = ({
       <Separator className="my-2" />
 
       <ul className="flex flex-col gap-2 items-center justify-start w-full grow">
+        <li className="w-full flex items-center justify-center">
+          <Button
+            className={cn("size-10 transition-transform duration-200", isOpen ? "rotate-0" : "rotate-180")}
+            size="icon"
+            variant="outline"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <ChevronRightIcon />
+          </Button>
+        </li>
         {navItems.map((item) => (
           <li
             key={item.title}
@@ -65,38 +78,38 @@ export const Navbar = ({
           >
             <Link
               href={item.href}
-              className="flex justify-center items-center w-full"
+              className="flex justify-start items-center w-full"
             >
               <Button
                 className={cn(
-                  'flex flex-row gap-2 items-center w-full h-10 px-2 p-2 transition-all duration-100 relative',
-                  isOpen ? 'p-2 justify-start' : 'p-0 justify-center size-10'
+                  'flex flex-row w-full h-10 justify-start gap-2 items-center p-2 transition-transform duration-200',
+                  { 'size-10': !isOpen }
                 )}
                 variant={pathname === item.href ? 'secondary' : 'outline'}
               >
-                <div className={cn(isOpen ? 'relative' : 'absolute')}>
-                  {item.icon}
-                </div>
-                <motion.p
-                  initial={{ scaleX: 1, display: 'box' }}
-                  animate={{
-                    scaleX: isOpen ? 1 : 0,
-                    display: isOpen ? 'inital' : 'hidden',
-                  }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                <span
+                  className={cn('shrink-0', {
+                    'h-full w-full items-center justify-center flex': !isOpen,
+                  })}
                 >
+                  {item.icon}
+                </span>
+                <p className={cn(isOpen ? 'inline-block' : 'hidden')}>
                   {item.title}
-                </motion.p>
+                </p>
               </Button>
             </Link>
           </li>
         ))}
       </ul>
 
-      <footer className="w-full items-center justify-center">
+      <footer className="w-full items-center  justify-center">
         <Button
           variant="destructive"
-          className="flex flex-row gap-2 items-center justify-center w-full px-2 size-10"
+          className={cn(
+            'flex flex-row gap-4 items-center justify-center px-2',
+            isOpen ? 'w-full h-11' : 'size-11'
+          )}
           onClick={async () => {
             setLogoutLoading(true);
             await logout();
