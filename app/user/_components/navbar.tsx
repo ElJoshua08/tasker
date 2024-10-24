@@ -63,7 +63,7 @@ export const Navbar = ({
       <ul className="flex flex-col gap-2 items-center justify-start w-full grow">
         <li className="w-full flex items-center justify-center">
           <Button
-            className={cn("size-10 transition-transform duration-200", isOpen ? "rotate-0" : "rotate-180")}
+            className={cn("transition-transform duration-200", isOpen ? "rotate-180 w-full" : "rotate-0 size-10")}
             size="icon"
             variant="outline"
             onClick={() => setIsOpen(!isOpen)}
