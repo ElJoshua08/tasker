@@ -83,7 +83,7 @@ export const Navbar = ({
           <li key={item.title} className="w-full">
             <Link
               href={item.href}
-              className="flex justify-start items-center w-full"
+              className="flex justify-start items-center w-auto"
             >
               <Button
                 className={cn(
