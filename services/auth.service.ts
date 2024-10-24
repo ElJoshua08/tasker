@@ -45,15 +45,15 @@ export async function login(
       return ['Invalid email or password', null];
     }
 
+    console.log("error during user login", error)
+
     return ['Woops! Something went wrong. Please try again later.', null];
   }
 }
 
 export async function oauthLogin(userId: string, secret: string) {
   const { account, database, users } = await createAdminClient();
-
   const session = await account.createSession(userId!, secret!);
-
   // Set the cookie
   cookies().set('auth-session', session.secret, {
     path: '/',
@@ -62,7 +62,6 @@ export async function oauthLogin(userId: string, secret: string) {
     sameSite: 'strict',
     expires: addMonths(new Date(), 4),
   });
-
   const isNewUser = await database
     .listDocuments(
       process.env.NEXT_PUBLIC_DATABASE!,
@@ -70,10 +69,8 @@ export async function oauthLogin(userId: string, secret: string) {
       [Query.equal('$id', session.userId)]
     )
     .then((data) => data.total === 0);
-
   if (isNewUser) {
     const user = await users.get(session.userId);
-
     await database.createDocument(
       process.env.NEXT_PUBLIC_DATABASE!,
       process.env.NEXT_PUBLIC_USERS_COLLECTION!,
@@ -84,10 +81,8 @@ export async function oauthLogin(userId: string, secret: string) {
       }
     );
   }
-
   redirect('/oauth-redirect');
 }
-
 export async function register(
   email: string,
   password: string,
