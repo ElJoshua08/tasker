@@ -64,7 +64,7 @@ export const Navbar = ({
         <li className="w-full flex items-center justify-center">
           <Button
             className={cn(
-              "transition-transform duration-200",
+              "transition-all duration-200",
               isOpen ? "w-full" : "size-10"
             )}
             size="icon"
