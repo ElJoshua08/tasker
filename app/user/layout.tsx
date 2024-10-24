@@ -49,7 +49,7 @@ export default async function TasksAppLayout({
       role="logged-in"
       redirectTo="/login"
     >
-      <main className="flex flex-row justify-start items-start h-screen w-full ">
+      <main className="flex flex-row justify-start items-start h-screen w-full overflow-hidden">
         <Navbar
           user={user}
           navItems={navItems}
