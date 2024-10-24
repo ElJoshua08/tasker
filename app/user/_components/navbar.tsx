@@ -41,7 +41,7 @@ export const Navbar = ({
       animate={{ width: isOpen ? WIDTHS.open : WIDTHS.closed }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      <header className={cn("flex flex-row gap-2 w-full items-center", isOpen ? "justify-start" : "justify-center")}>
+      <header className={cn("flex flex-row gap-2 w-full items-center justify-start", isOpen ? "w-full" : "size-10")}>
         <Avatar className="bg-primary/50 text-2xl text-foreground flex items-center justify-center font-semibold">
           {user.name.charAt(0)}
         </Avatar>
