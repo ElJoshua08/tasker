@@ -23,7 +23,7 @@ export const Navbar = ({
   user,
 }: {
   navItems: NavItem[];
-  user: Models.User<Models.Preferences>;
+  user: Models.User<Models.Preferences> | null;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
