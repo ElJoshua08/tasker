@@ -63,12 +63,12 @@ export const Navbar = ({
       <ul className="flex flex-col gap-2 items-center justify-start w-full grow">
         <li className="w-full flex items-center justify-center">
           <Button
-            className={cn("transition-transform duration-200", isOpen ? "rotate-180 w-full" : "rotate-0 size-10")}
+            className={cn("transition-transform duration-200", isOpen ? "w-full" : "size-10")}
             size="icon"
             variant="outline"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <ChevronRightIcon />
+            <ChevronRightIcon className={cn("transition-transform duration-200",isOpen ? "rotate-180" : "rotate-0")} />
           </Button>
         </li>
         {navItems.map((item) => (
