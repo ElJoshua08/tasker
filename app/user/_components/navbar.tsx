@@ -35,7 +35,7 @@ export const Navbar = ({
     <motion.nav
       className={cn(
         "bg-background/50 backdrop-blur-xl flex flex-col items-stretch justify-start h-screen border-r border-border p-2 grow-0 shrink-0 relative",
-        isOpen ? "min-w-full relative  sm:w-60" : "w-20"
+        isOpen ? "min-w-full relative  sm:min-w-60" : "w-20"
       )}
       initial={{ width: WIDTHS.open }}
       animate={{ width: isOpen ? WIDTHS.open : WIDTHS.closed }}
