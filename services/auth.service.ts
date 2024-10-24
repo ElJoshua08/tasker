@@ -45,7 +45,7 @@ export async function login(
       return ['Invalid email or password', null];
     }
 
-    console.log(error)
+    console.log("error during user login", error)
 
     return ['Woops! Something went wrong. Please try again later.', null];
   }
