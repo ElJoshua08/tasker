@@ -80,7 +80,7 @@ export const Navbar = ({
           </Button>
         </li>
         {navItems.map((item) => (
-          <li key={item.title} className="w-full">
+          <li key={item.title} className="w-full flex justify-center items-center">
             <Link
               href={item.href}
               className={cn("flex justify-start items-center", isOpen ? "w-full" : "w-10")}
