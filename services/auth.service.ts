@@ -45,13 +45,11 @@ export async function login(
       return ['Invalid email or password', null];
     }
 
-    console.log('error during user login', error);
-
     return ['Woops! Something went wrong. Please try again later.', null];
   }
 }
 
-export async function oauthLogin(userId: string, secret: string) {
+export async function oauthLogin(provider: string, userId: string, secret: string) {
   const { account, database, users } = await createAdminClient();
   const session = await account.createSession(userId!, secret!);
 
@@ -68,9 +66,6 @@ export async function oauthLogin(userId: string, secret: string) {
 
   if (!user) throw new Error('User not found');
 
-  console.log('session is', session);
-
-  console.log(account);
   // Get the info from google API
   const googleRes = await fetch(
     'https://www.googleapis.com/oauth2/v3/userinfo',

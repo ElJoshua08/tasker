@@ -1,6 +1,7 @@
 'use client';
 
-import { GoogleIcon } from '@/components/google-icon';
+import { GithubIcon } from '@/components/icons/github';
+import { GoogleIcon } from '@/components/icons/google';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -19,7 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { signUpWithGoogle } from '@/lib/server/oauth';
+import { signUpWithGithub, signUpWithGoogle } from '@/lib/server/oauth';
 import { login } from '@/services/auth.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon, LoaderCircleIcon } from 'lucide-react';
@@ -167,7 +168,25 @@ export default function LoginPage() {
         size="lg"
         onClick={() => signUpWithGoogle()}
       >
-        <GoogleIcon className=" text-foreground" size={20} /> Continue with Google
+        <GoogleIcon
+          className="text-foreground"
+          size={20}
+        />{' '}
+        Continue with Google
+      </Button>
+
+      <Button
+        variant="outline"
+        className="flex items-center justify-start gap-4 w-full px-4 text-base font-normal
+        "
+        size="lg"
+        onClick={() => signUpWithGithub()}
+      >
+        <GithubIcon
+          className="text-foreground"
+          size={20}
+        />{' '}
+        Continue with Github
       </Button>
 
       <Link href="/register">

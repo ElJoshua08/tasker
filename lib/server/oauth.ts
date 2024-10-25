@@ -19,3 +19,18 @@ export async function signUpWithGoogle() {
 
   return redirect(redirectUrl);
 }
+
+export async function signUpWithGithub() {
+  const { account } = await createAdminClient();
+
+  const origin = headers().get('origin');
+
+  const redirectUrl = await account.createOAuth2Token(
+    OAuthProvider.Github,
+    `${origin}/oauth`,
+    `${origin}/login`,
+    ['user:email']
+  );
+
+  return redirect(redirectUrl);
+}
