@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { signUpWithGoogle } from '@/lib/server/oauth';
+import { signUpWithGithub, signUpWithGoogle } from '@/lib/server/oauth';
 import { register } from '@/services/auth.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon, LoaderCircleIcon } from 'lucide-react';
