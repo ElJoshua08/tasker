@@ -49,7 +49,7 @@ export async function login(
   }
 }
 
-export async function oauthLogin(provider: string, userId: string, secret: string) {
+export async function oauthLogin(userId: string, secret: string, provider?: string) {
   const { account, database, users } = await createAdminClient();
   const session = await account.createSession(userId!, secret!);
 
