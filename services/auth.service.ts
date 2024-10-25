@@ -76,19 +76,15 @@ export async function oauthLogin(userId: string, secret: string, provider?: stri
     }
   );
 
-  console.log('googleRes is', googleRes.status);
 
   if (googleRes.status === 200) {
     const googleUserInfo = await googleRes.json();
 
-    console.log('googleUserInfo is', googleUserInfo);
 
     await account.updatePrefs({
       ...user?.prefs,
       avatar: googleUserInfo.picture,
     });
-  } else {
-    console.log('algo fue mal');
   }
 
   const isNewUser = await database

@@ -17,6 +17,8 @@ const WIDTHS = {
   closed: 60,
 };
 
+const MotionButton = motion(Button);
+
 export const Navbar = ({
   navItems,
   user,
@@ -24,7 +26,6 @@ export const Navbar = ({
   navItems: NavItem[];
   user: Models.User<Models.Preferences> | null;
 }) => {
-  const [scope, animate] = useAnimate();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -32,86 +33,116 @@ export const Navbar = ({
 
   return (
     <motion.nav
-      ref={scope}
+      layout
       className={cn(
         'bg-background/50 backdrop-blur-xl flex flex-col items-stretch justify-start h-screen border-r border-border p-2 grow-0 shrink-0 relative'
       )}
+      style={{
+        width: isOpen ? '250px' : '60px',
+      }}
     >
-      <header
+      <motion.header
+        layout
+        id="header"
         className={cn('flex flex-row gap-2 w-full items-center justify-start')}
       >
-        <Avatar className="bg-primary/50 text-2xl text-foreground flex items-center justify-center font-semibold">
-          {user.name.charAt(0)}
-        </Avatar>
-        <motion.h1
-          initial={{ scaleX: 1, display: 'block' }}
-          animate={{
-            scaleX: isOpen ? 1 : 0,
-            transformOrigin: 'left',
-            display: isOpen ? 'initial' : 'none',
-          }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        >
-          {user.name}
-        </motion.h1>
-      </header>
+        <motion.div layout>
+          <Avatar className="bg-primary/50 text-2xl text-foreground flex items-center justify-center font-semibold">
+            {user.name.charAt(0)}
+          </Avatar>
+        </motion.div>
+        {isOpen && (
+          <motion.h1
+            layout
+            initial={{ y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.125 }}
+          >
+            {user.name}
+          </motion.h1>
+        )}
+      </motion.header>
 
       <Separator className="my-2" />
 
       <ul className="flex flex-col gap-2 items-center justify-start w-full grow">
-        {navItems.map((item) => (
+        {navItems.map((item, index) => (
           <li
             key={item.title}
-            className="w-full flex justify-center items-center"
+            className="w-full"
           >
             <Link
               href={item.href}
-              className={cn(
-                'flex justify-start items-center',
-                isOpen ? 'w-full' : 'w-10'
-              )}
+              className="w-full"
             >
-              <Button
-                className={cn(
-                  'flex flex-row w-full h-10 justify-start gap-2 items-center p-2 transition-transform duration-200',
-                  { 'size-10': !isOpen }
-                )}
-                variant={pathname === item.href ? 'secondary' : 'outline'}
-              >
-                <span
-                  className={cn('shrink-0', {
-                    'h-full w-full items-center justify-center flex': !isOpen,
-                  })}
+              <motion.div layout>
+                <MotionButton
+                  layout
+                  className="w-full h-10 items-center justify-start px-1"
+                  variant={pathname === item.href ? 'secondary' : 'outline'}
                 >
-                  {item.icon}
-                </span>
-                <p className={cn(isOpen ? 'inline-block' : 'hidden')}>
-                  {item.title}
-                </p>
-              </Button>
+                  <motion.div
+                    layout
+                    className="h-full w-10 text-2xl flex items-center justify-center "
+                  >
+                    {item.icon}
+                  </motion.div>
+                  {isOpen && (
+                    <motion.p
+                      layout
+                      initial={{ y: 12, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.125 * (index + 1) }}
+                      className={cn(isOpen ? 'inline-block' : 'hidden')}
+                    >
+                      {item.title}
+                    </motion.p>
+                  )}
+                </MotionButton>
+              </motion.div>
             </Link>
           </li>
         ))}
       </ul>
 
-      <footer className="w-full items-center  justify-center">
-        <Button
+      <motion.footer
+        className="w-full items-center  justify-start"
+        layout
+      >
+        <MotionButton
+          layout
           className={cn(
-            'transition-all duration-200',
-            isOpen ? 'w-full' : 'size-10'
+            'flex items-center justify-start gap-2 px-2  w-full h-10'
           )}
           size="icon"
           variant="outline"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <ChevronsRightIcon
-            className={cn(
-              'transition-transform duration-200',
-              isOpen ? 'rotate-180' : 'rotate-0'
-            )}
-          />
-        </Button>
-      </footer>
+          <motion.div layout>
+            <ChevronsRightIcon
+              className="transition-all duration-200"
+              style={{
+                rotate: isOpen ? '180deg' : '0deg',
+              }}
+            />
+          </motion.div>
+          {isOpen && (
+            <motion.p
+              layout
+              initial={{
+                opacity: 0,
+                y: 12,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+            >
+              {isOpen && 'Hide'}
+            </motion.p>
+          )}
+        </MotionButton>
+      </motion.footer>
     </motion.nav>
   );
 };
