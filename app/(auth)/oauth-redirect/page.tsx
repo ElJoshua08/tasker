@@ -9,8 +9,8 @@ export default function OAuthRedirectPage() {
   useEffect(() => {
     setTimeout(() => {
       router.push('/user');
-    }, 1000);
-  }, []);
+    }, 500);
+  }, [router]);
 
-  return <div>Please wait you will be redirected shortly</div>;
+  return <div>Please wait you will be redirected shortly...</div>;
 }

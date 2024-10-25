@@ -2,6 +2,7 @@
 
 import { GithubIcon } from '@/components/icons/github';
 import { GoogleIcon } from '@/components/icons/google';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
