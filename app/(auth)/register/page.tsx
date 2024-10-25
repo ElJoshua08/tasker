@@ -1,7 +1,7 @@
 'use client';
 
-import { GoogleIcon } from '@/components/google-icon';
-import { Button } from '@/components/ui/button';
+import { GithubIcon } from '@/components/icons/github';
+import { GoogleIcon } from '@/components/icons/google';
 import {
   Card,
   CardContent,
@@ -186,6 +186,20 @@ export default function RegisterPage() {
           size={20}
         />{' '}
         Continue with Google
+      </Button>
+
+      <Button
+        variant="outline"
+        className="flex items-center justify-start gap-4 w-full px-4 text-base font-normal
+        "
+        size="lg"
+        onClick={() => signUpWithGithub()}
+      >
+        <GithubIcon
+          className="text-foreground"
+          size={20}
+        />{' '}
+        Continue with Github
       </Button>
 
       <Link href="/login">
