@@ -54,7 +54,9 @@ export default async function TasksAppLayout({
           user={user}
           navItems={navItems}
         />
-        {children}
+        <section className="flex fle-col items-start justify-start p-2">
+          {children}
+        </section>
       </main>
     </ProtectedRoute>
   );

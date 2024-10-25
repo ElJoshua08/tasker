@@ -68,7 +68,7 @@ export default function RegisterPage() {
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 w-72">
-      <Card className='w-full'>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle className="font-medium text-2xl uppercase tracking-widest">
             Register
@@ -181,7 +181,11 @@ export default function RegisterPage() {
         size="lg"
         onClick={() => signUpWithGoogle()}
       >
-        <GoogleIcon size={20} /> Continue with Google
+        <GoogleIcon
+          className="text-foreground"
+          size={20}
+        />{' '}
+        Continue with Google
       </Button>
 
       <Link href="/login">
@@ -189,7 +193,7 @@ export default function RegisterPage() {
           variant="link"
           className="flex items-end p-0 h-auto"
         >
-          {"Already have an account?"}
+          {'Already have an account?'}
         </Button>
       </Link>
     </section>

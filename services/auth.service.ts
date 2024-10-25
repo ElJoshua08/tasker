@@ -45,7 +45,7 @@ export async function login(
       return ['Invalid email or password', null];
     }
 
-    console.log("error during user login", error)
+    console.log('error during user login', error);
 
     return ['Woops! Something went wrong. Please try again later.', null];
   }
@@ -54,6 +54,7 @@ export async function login(
 export async function oauthLogin(userId: string, secret: string) {
   const { account, database, users } = await createAdminClient();
   const session = await account.createSession(userId!, secret!);
+
   // Set the cookie
   cookies().set('auth-session', session.secret, {
     path: '/',
@@ -62,6 +63,39 @@ export async function oauthLogin(userId: string, secret: string) {
     sameSite: 'strict',
     expires: addMonths(new Date(), 4),
   });
+
+  const user = await getUser();
+
+  if (!user) throw new Error('User not found');
+
+  console.log('session is', session);
+
+  console.log(account);
+  // Get the info from google API
+  const googleRes = await fetch(
+    'https://www.googleapis.com/oauth2/v3/userinfo',
+    {
+      headers: {
+        Authorization: `Bearer ${session.providerAccessToken}`,
+      },
+    }
+  );
+
+  console.log('googleRes is', googleRes.status);
+
+  if (googleRes.status === 200) {
+    const googleUserInfo = await googleRes.json();
+
+    console.log('googleUserInfo is', googleUserInfo);
+
+    await account.updatePrefs({
+      ...user?.prefs,
+      avatar: googleUserInfo.picture,
+    });
+  } else {
+    console.log('algo fue mal');
+  }
+
   const isNewUser = await database
     .listDocuments(
       process.env.NEXT_PUBLIC_DATABASE!,
@@ -69,8 +103,8 @@ export async function oauthLogin(userId: string, secret: string) {
       [Query.equal('$id', session.userId)]
     )
     .then((data) => data.total === 0);
+
   if (isNewUser) {
-    const user = await users.get(session.userId);
     await database.createDocument(
       process.env.NEXT_PUBLIC_DATABASE!,
       process.env.NEXT_PUBLIC_USERS_COLLECTION!,

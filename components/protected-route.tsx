@@ -13,7 +13,6 @@ export const ProtectedRoute = async ({
   redirectTo?: string;
 }) => {
   const user = await getUser();
-
   switch (role) {
     case 'no-logged-in':
       if (!user) return <>{children}</>;
@@ -23,6 +22,8 @@ export const ProtectedRoute = async ({
       redirect(redirectTo);
     case 'admin':
       if (user && user.labels.includes('admin')) return <>{children}</>;
+      redirect(redirectTo);
+    default:
       redirect(redirectTo);
   }
 };

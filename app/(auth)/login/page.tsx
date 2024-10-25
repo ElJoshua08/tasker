@@ -167,7 +167,7 @@ export default function LoginPage() {
         size="lg"
         onClick={() => signUpWithGoogle()}
       >
-        <GoogleIcon size={20} /> Continue with Google
+        <GoogleIcon className=" text-foreground" size={20} /> Continue with Google
       </Button>
 
       <Link href="/register">

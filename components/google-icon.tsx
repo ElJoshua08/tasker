@@ -1,15 +1,13 @@
 import { SVGProps } from 'react';
 
 export const GoogleIcon = ({
-  size,
+  size=24,
   ...props
 }: {
   size?: number;
 } & SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      x="0px"
-      y="0px"
       width={size}
       height={size}
       viewBox="0,0,256,256"
@@ -17,7 +15,7 @@ export const GoogleIcon = ({
       {...props}
     >
       <g
-        fill="#ffffff"
+        fill="currentColor"
         fillRule="nonzero"
         stroke="none"
         strokeWidth="1"
