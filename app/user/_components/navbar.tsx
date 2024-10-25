@@ -1,35 +1,56 @@
 'use client';
 
+import { FC, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { NavItem } from '@/interfaces';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { useState } from 'react';
-import { motion, useAnimate } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
 import { usePathname } from 'next/navigation';
 import { Avatar } from '@/components/ui/avatar';
 import { Models } from 'node-appwrite';
-import { ChevronsRightIcon } from 'lucide-react';
+import {
+  ChevronsRightIcon,
+  HomeIcon,
+  SettingsIcon,
+  SquareCheckIcon,
+} from 'lucide-react';
+
+const MotionButton = motion(Button);
 
 const WIDTHS = {
   open: 250,
   closed: 60,
 };
 
-const MotionButton = motion(Button);
-
-export const Navbar = ({
-  navItems,
-  user,
-}: {
-  navItems: NavItem[];
+interface NavbarProps {
   user: Models.User<Models.Preferences> | null;
-}) => {
+}
+
+export const Navbar: FC<NavbarProps> = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
   if (!user) return null;
+
+  const navItems = [
+    {
+      title: 'Home',
+      href: '/user',
+      Icon: HomeIcon,
+    },
+    {
+      title: 'Tasks',
+      href: '/user/tasks',
+      Icon: SquareCheckIcon,
+    },
+    {
+      title: 'Settings',
+      href: '/user/settings',
+      Icon: SettingsIcon,
+    },
+  ] as NavItem[];
 
   return (
     <motion.nav
@@ -75,31 +96,30 @@ export const Navbar = ({
               href={item.href}
               className="w-full"
             >
-              <motion.div layout>
-                <MotionButton
+              <MotionButton
+                layout
+                transition={{ delay: 0.005 * (index + 1) }}
+                className="w-full h-10 items-center justify-start px-1"
+                variant={pathname === item.href ? 'default' : 'outline'}
+              >
+                <motion.div
                   layout
-                  className="w-full h-10 items-center justify-start px-1"
-                  variant={pathname === item.href ? 'secondary' : 'outline'}
+                  className="h-full w-10 text-2xl flex items-center justify-center "
                 >
-                  <motion.div
+                  <item.Icon />
+                </motion.div>
+                {isOpen && (
+                  <motion.p
                     layout
-                    className="h-full w-10 text-2xl flex items-center justify-center "
+                    initial={{ y: 12, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.125 * (index + 1) }}
+                    className={cn(isOpen ? 'inline-block' : 'hidden')}
                   >
-                    {item.icon}
-                  </motion.div>
-                  {isOpen && (
-                    <motion.p
-                      layout
-                      initial={{ y: 12, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.125 * (index + 1) }}
-                      className={cn(isOpen ? 'inline-block' : 'hidden')}
-                    >
-                      {item.title}
-                    </motion.p>
-                  )}
-                </MotionButton>
-              </motion.div>
+                    {item.title}
+                  </motion.p>
+                )}
+              </MotionButton>
             </Link>
           </li>
         ))}

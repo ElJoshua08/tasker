@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from 'framer-motion';
+
 export default function UserPage() {
-  return <div>User Page</div>;
+  return <motion.div layout>User Page</motion.div>;
 }
